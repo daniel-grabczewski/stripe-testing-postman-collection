@@ -1,0 +1,2203 @@
+{
+  "info": {
+    "_postman_id": "b1ef5cc6-f36f-4b2f-9e57-2a5e1660b929",
+    "name": "Stripe QA Pack #1",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "21205157",
+    "_collection_link": "https://go.postman.co/collection/21205157-b1ef5cc6-f36f-4b2f-9e57-2a5e1660b929?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "TC-00 Create PaymentIntent (Auth Check)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "amount",
+              "value": "{{amount}}",
+              "type": "text",
+              "uuid": "22adac17-2a49-4070-9690-9abcd38291cf"
+            },
+            {
+              "key": "currency",
+              "value": "{{currency}}",
+              "type": "text",
+              "uuid": "4b798923-2d14-44b2-8ecc-f2dfe8b69396"
+            },
+            {
+              "key": "automatic_payment_methods[enabled]",
+              "value": "true",
+              "type": "text",
+              "uuid": "0cf379a7-3524-4955-8097-dd64b8b5db30"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-01-R1 Create PaymentIntent",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "amount",
+              "value": "{{amount}}",
+              "type": "text",
+              "uuid": "22adac17-2a49-4070-9690-9abcd38291cf"
+            },
+            {
+              "key": "currency",
+              "value": "{{currency}}",
+              "type": "text",
+              "uuid": "4b798923-2d14-44b2-8ecc-f2dfe8b69396"
+            },
+            {
+              "key": "automatic_payment_methods[enabled]",
+              "value": "true",
+              "type": "text",
+              "uuid": "0cf379a7-3524-4955-8097-dd64b8b5db30"
+            },
+            {
+              "key": "automatic_payment_methods[allow_redirects]",
+              "value": "never",
+              "type": "text",
+              "uuid": "b73d6153-e2d8-446d-8ab7-3d6cd2d5a93a"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-01-R2 Confirm PaymentIntent",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);\r",
+              "\r",
+              "if (json.latest_charge) {\r",
+              "  const chargeId = (typeof json.latest_charge === \"string\")\r",
+              "    ? json.latest_charge\r",
+              "    : json.latest_charge.id;\r",
+              "  pm.environment.set(\"latest_charge_id\", chargeId);\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "payment_method",
+              "value": "{{pm_success}}",
+              "type": "text",
+              "uuid": "bce85de2-c2c7-4039-b79e-44beabca9dde"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents/{{pi_id}}/confirm",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents",
+            "{{pi_id}}",
+            "confirm"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-02-R1 Create PaymentIntent",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "amount",
+              "value": "{{amount}}",
+              "type": "text",
+              "uuid": "22adac17-2a49-4070-9690-9abcd38291cf"
+            },
+            {
+              "key": "currency",
+              "value": "{{currency}}",
+              "type": "text",
+              "uuid": "4b798923-2d14-44b2-8ecc-f2dfe8b69396"
+            },
+            {
+              "key": "automatic_payment_methods[enabled]",
+              "value": "true",
+              "type": "text",
+              "uuid": "0cf379a7-3524-4955-8097-dd64b8b5db30"
+            },
+            {
+              "key": "automatic_payment_methods[allow_redirects]",
+              "value": "never",
+              "type": "text",
+              "uuid": "ee895432-e6ac-475e-8b38-4882a4bf9c03"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-02-R2 — Confirm PaymentIntent (declined payment method)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "payment_method",
+              "value": "{{pm_decline}}",
+              "type": "text",
+              "uuid": "8a5dfef0-1fe6-474f-a6c1-ddf3abbc3724"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents/{{pi_id}}/confirm",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents",
+            "{{pi_id}}",
+            "confirm"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-03-R1 Create PaymentIntent",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "amount",
+              "value": "{{amount}}",
+              "type": "text",
+              "uuid": "22adac17-2a49-4070-9690-9abcd38291cf"
+            },
+            {
+              "key": "currency",
+              "value": "{{currency}}",
+              "type": "text",
+              "uuid": "4b798923-2d14-44b2-8ecc-f2dfe8b69396"
+            },
+            {
+              "key": "automatic_payment_methods[enabled]",
+              "value": "true",
+              "type": "text",
+              "uuid": "0cf379a7-3524-4955-8097-dd64b8b5db30"
+            },
+            {
+              "key": "automatic_payment_methods[allow_redirects]",
+              "value": "never",
+              "type": "text",
+              "uuid": "bbd8911c-7d42-48ed-8032-5fc13dce66c7"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-03-R2 Confirm PaymentIntent (Insufficient Funds)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "payment_method",
+              "value": "{{pm_insufficient}}",
+              "type": "text",
+              "uuid": "2ab6d4c3-6234-4d05-b936-91d509a1e496"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents/{{pi_id}}/confirm",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents",
+            "{{pi_id}}",
+            "confirm"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-04-R1 Create PaymentIntent",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "amount",
+              "value": "{{amount}}",
+              "type": "text",
+              "uuid": "22adac17-2a49-4070-9690-9abcd38291cf"
+            },
+            {
+              "key": "currency",
+              "value": "{{currency}}",
+              "type": "text",
+              "uuid": "4b798923-2d14-44b2-8ecc-f2dfe8b69396"
+            },
+            {
+              "key": "automatic_payment_methods[enabled]",
+              "value": "true",
+              "type": "text",
+              "uuid": "0cf379a7-3524-4955-8097-dd64b8b5db30"
+            },
+            {
+              "key": "automatic_payment_methods[allow_redirects]",
+              "value": "never",
+              "type": "text",
+              "uuid": "6e0a621c-97a6-4b19-98c0-3b3072cd1135"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-04-R2 Confirm PaymentIntent (Auth Required)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "payment_method",
+              "value": "{{pm_auth_required}}",
+              "type": "text",
+              "uuid": "8a5dfef0-1fe6-474f-a6c1-ddf3abbc3724"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents/{{pi_id}}/confirm",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents",
+            "{{pi_id}}",
+            "confirm"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-05-R1 Create PaymentIntent (amount=0)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "amount",
+              "value": "0",
+              "type": "text",
+              "uuid": "22adac17-2a49-4070-9690-9abcd38291cf"
+            },
+            {
+              "key": "currency",
+              "value": "{{currency}}",
+              "type": "text",
+              "uuid": "4b798923-2d14-44b2-8ecc-f2dfe8b69396"
+            },
+            {
+              "key": "automatic_payment_methods[enabled]",
+              "value": "true",
+              "type": "text",
+              "uuid": "0cf379a7-3524-4955-8097-dd64b8b5db30"
+            },
+            {
+              "key": "automatic_payment_methods[allow_redirects]",
+              "value": "never",
+              "type": "text",
+              "uuid": "6e0a621c-97a6-4b19-98c0-3b3072cd1135"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-05-R2 Create PaymentIntent (amount=-1)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "amount",
+              "value": "-1",
+              "type": "text",
+              "uuid": "22adac17-2a49-4070-9690-9abcd38291cf"
+            },
+            {
+              "key": "currency",
+              "value": "{{currency}}",
+              "type": "text",
+              "uuid": "4b798923-2d14-44b2-8ecc-f2dfe8b69396"
+            },
+            {
+              "key": "automatic_payment_methods[enabled]",
+              "value": "true",
+              "type": "text",
+              "uuid": "0cf379a7-3524-4955-8097-dd64b8b5db30"
+            },
+            {
+              "key": "automatic_payment_methods[allow_redirects]",
+              "value": "never",
+              "type": "text",
+              "uuid": "6e0a621c-97a6-4b19-98c0-3b3072cd1135"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-06-R1 Create PaymentIntent (invalid currency)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "amount",
+              "value": "{{amount}}",
+              "type": "text",
+              "uuid": "22adac17-2a49-4070-9690-9abcd38291cf"
+            },
+            {
+              "key": "currency",
+              "value": "notacurrency",
+              "type": "text",
+              "uuid": "4b798923-2d14-44b2-8ecc-f2dfe8b69396"
+            },
+            {
+              "key": "automatic_payment_methods[enabled]",
+              "value": "true",
+              "type": "text",
+              "uuid": "0cf379a7-3524-4955-8097-dd64b8b5db30"
+            },
+            {
+              "key": "automatic_payment_methods[allow_redirects]",
+              "value": "never",
+              "type": "text",
+              "uuid": "6e0a621c-97a6-4b19-98c0-3b3072cd1135"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-07-R1 Create PaymentIntent (manual capture)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "amount",
+              "value": "{{amount}}",
+              "type": "text",
+              "uuid": "22adac17-2a49-4070-9690-9abcd38291cf"
+            },
+            {
+              "key": "currency",
+              "value": "{{currency}}",
+              "type": "text",
+              "uuid": "4b798923-2d14-44b2-8ecc-f2dfe8b69396"
+            },
+            {
+              "key": "automatic_payment_methods[enabled]",
+              "value": "true",
+              "type": "text",
+              "uuid": "0cf379a7-3524-4955-8097-dd64b8b5db30"
+            },
+            {
+              "key": "automatic_payment_methods[allow_redirects]",
+              "value": "never",
+              "type": "text",
+              "uuid": "6e0a621c-97a6-4b19-98c0-3b3072cd1135"
+            },
+            {
+              "key": "capture_method",
+              "value": "manual",
+              "type": "text",
+              "uuid": "5e57a768-758f-42aa-a6f5-ed0dddb1e503"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-07-R2 Confirm PaymentIntent (manual capture)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "payment_method",
+              "value": "{{pm_success}}",
+              "type": "text",
+              "uuid": "104e5f83-afe1-4e0b-a97b-9ac8a3917911"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents/{{pi_id}}/confirm",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents",
+            "{{pi_id}}",
+            "confirm"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-07-R3 Capture PaymentIntent",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": []
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents/{{pi_id}}/capture",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents",
+            "{{pi_id}}",
+            "capture"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-08-R1 Create PaymentIntent (automatic)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "amount",
+              "value": "{{amount}}",
+              "type": "text",
+              "uuid": "22adac17-2a49-4070-9690-9abcd38291cf"
+            },
+            {
+              "key": "currency",
+              "value": "{{currency}}",
+              "type": "text",
+              "uuid": "4b798923-2d14-44b2-8ecc-f2dfe8b69396"
+            },
+            {
+              "key": "automatic_payment_methods[enabled]",
+              "value": "true",
+              "type": "text",
+              "uuid": "0cf379a7-3524-4955-8097-dd64b8b5db30"
+            },
+            {
+              "key": "automatic_payment_methods[allow_redirects]",
+              "value": "never",
+              "type": "text",
+              "uuid": "6e0a621c-97a6-4b19-98c0-3b3072cd1135"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-08-R2 Confirm PaymentIntent (automatic)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);\r",
+              "\r",
+              "if (json.latest_charge) {\r",
+              "  const chargeId = (typeof json.latest_charge === \"string\")\r",
+              "    ? json.latest_charge\r",
+              "    : json.latest_charge.id;\r",
+              "  pm.environment.set(\"latest_charge_id\", chargeId);\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "payment_method",
+              "value": "{{pm_success}}",
+              "type": "text",
+              "uuid": "bce85de2-c2c7-4039-b79e-44beabca9dde"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents/{{pi_id}}/confirm",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents",
+            "{{pi_id}}",
+            "confirm"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-08-R3 Capture PaymentIntent (should fail)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": []
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents/{{pi_id}}/capture",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents",
+            "{{pi_id}}",
+            "capture"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-09-R1 Create PaymentIntent",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "amount",
+              "value": "{{amount}}",
+              "type": "text",
+              "uuid": "22adac17-2a49-4070-9690-9abcd38291cf"
+            },
+            {
+              "key": "currency",
+              "value": "{{currency}}",
+              "type": "text",
+              "uuid": "4b798923-2d14-44b2-8ecc-f2dfe8b69396"
+            },
+            {
+              "key": "automatic_payment_methods[enabled]",
+              "value": "true",
+              "type": "text",
+              "uuid": "0cf379a7-3524-4955-8097-dd64b8b5db30"
+            },
+            {
+              "key": "automatic_payment_methods[allow_redirects]",
+              "value": "never",
+              "type": "text",
+              "uuid": "6e0a621c-97a6-4b19-98c0-3b3072cd1135"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-09-R2 Confirm PaymentIntent",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);\r",
+              "\r",
+              "if (json.latest_charge) {\r",
+              "  const chargeId = (typeof json.latest_charge === \"string\")\r",
+              "    ? json.latest_charge\r",
+              "    : json.latest_charge.id;\r",
+              "  pm.environment.set(\"latest_charge_id\", chargeId);\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "payment_method",
+              "value": "{{pm_success}}",
+              "type": "text",
+              "uuid": "bce85de2-c2c7-4039-b79e-44beabca9dde"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents/{{pi_id}}/confirm",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents",
+            "{{pi_id}}",
+            "confirm"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-09-R3 Create Refund (full) by PaymentIntent",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "payment_intent",
+              "value": "{{pi_id}}",
+              "type": "text",
+              "uuid": "08a38dc2-3cf0-4896-8024-caffa33ce56b"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/refunds",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "refunds"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-10-R1 Create PaymentIntent",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "amount",
+              "value": "{{amount}}",
+              "type": "text",
+              "uuid": "22adac17-2a49-4070-9690-9abcd38291cf"
+            },
+            {
+              "key": "currency",
+              "value": "{{currency}}",
+              "type": "text",
+              "uuid": "4b798923-2d14-44b2-8ecc-f2dfe8b69396"
+            },
+            {
+              "key": "automatic_payment_methods[enabled]",
+              "value": "true",
+              "type": "text",
+              "uuid": "0cf379a7-3524-4955-8097-dd64b8b5db30"
+            },
+            {
+              "key": "automatic_payment_methods[allow_redirects]",
+              "value": "never",
+              "type": "text",
+              "uuid": "6e0a621c-97a6-4b19-98c0-3b3072cd1135"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-10-R2 Confirm PaymentIntent",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);\r",
+              "\r",
+              "if (json.latest_charge) {\r",
+              "  const chargeId = (typeof json.latest_charge === \"string\")\r",
+              "    ? json.latest_charge\r",
+              "    : json.latest_charge.id;\r",
+              "  pm.environment.set(\"latest_charge_id\", chargeId);\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "payment_method",
+              "value": "{{pm_success}}",
+              "type": "text",
+              "uuid": "bce85de2-c2c7-4039-b79e-44beabca9dde"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents/{{pi_id}}/confirm",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents",
+            "{{pi_id}}",
+            "confirm"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-10-R3 Create Refund (partial) by PaymentIntent",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "payment_intent",
+              "value": "{{pi_id}}",
+              "type": "text",
+              "uuid": "08a38dc2-3cf0-4896-8024-caffa33ce56b"
+            },
+            {
+              "key": "amount",
+              "value": "500",
+              "type": "text",
+              "uuid": "901de41a-0402-401b-af60-63e2a043f506"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/refunds",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "refunds"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-11-R1 Create PaymentIntent",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "amount",
+              "value": "{{amount}}",
+              "type": "text",
+              "uuid": "22adac17-2a49-4070-9690-9abcd38291cf"
+            },
+            {
+              "key": "currency",
+              "value": "{{currency}}",
+              "type": "text",
+              "uuid": "4b798923-2d14-44b2-8ecc-f2dfe8b69396"
+            },
+            {
+              "key": "automatic_payment_methods[enabled]",
+              "value": "true",
+              "type": "text",
+              "uuid": "0cf379a7-3524-4955-8097-dd64b8b5db30"
+            },
+            {
+              "key": "automatic_payment_methods[allow_redirects]",
+              "value": "never",
+              "type": "text",
+              "uuid": "6e0a621c-97a6-4b19-98c0-3b3072cd1135"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-11-R2 Confirm PaymentIntent",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);\r",
+              "\r",
+              "if (json.latest_charge) {\r",
+              "  const chargeId = (typeof json.latest_charge === \"string\")\r",
+              "    ? json.latest_charge\r",
+              "    : json.latest_charge.id;\r",
+              "  pm.environment.set(\"latest_charge_id\", chargeId);\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "payment_method",
+              "value": "{{pm_success}}",
+              "type": "text",
+              "uuid": "bce85de2-c2c7-4039-b79e-44beabca9dde"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents/{{pi_id}}/confirm",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents",
+            "{{pi_id}}",
+            "confirm"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-11-R3 Create Refund (partial) by PaymentIntent",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "\r",
+              "if (json.object === \"payment_intent\") {\r",
+              "  pm.environment.set(\"pi_id\", json.id);\r",
+              "}\r",
+              "\r",
+              "if (json.object === \"refund\") {\r",
+              "  pm.environment.set(\"refund_id\", json.id);\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "payment_intent",
+              "value": "{{pi_id}}",
+              "type": "text",
+              "uuid": "08a38dc2-3cf0-4896-8024-caffa33ce56b"
+            },
+            {
+              "key": "amount",
+              "value": "500",
+              "type": "text",
+              "uuid": "cc29202c-f33e-4cf4-a91f-14a995fdcb91"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/refunds",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "refunds"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-11-R4 Refund over-limit (should fail)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "payment_intent",
+              "value": "{{pi_id}}",
+              "type": "text",
+              "uuid": "08a38dc2-3cf0-4896-8024-caffa33ce56b"
+            },
+            {
+              "key": "amount",
+              "value": "{{amount}}",
+              "type": "text",
+              "uuid": "b2409e5a-51fd-428a-98ca-d2cef23740d8"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/refunds",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "refunds"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-12-R1 Create PaymentIntent",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "amount",
+              "value": "{{amount}}",
+              "type": "text",
+              "uuid": "22adac17-2a49-4070-9690-9abcd38291cf"
+            },
+            {
+              "key": "currency",
+              "value": "{{currency}}",
+              "type": "text",
+              "uuid": "4b798923-2d14-44b2-8ecc-f2dfe8b69396"
+            },
+            {
+              "key": "automatic_payment_methods[enabled]",
+              "value": "true",
+              "type": "text",
+              "uuid": "0cf379a7-3524-4955-8097-dd64b8b5db30"
+            },
+            {
+              "key": "automatic_payment_methods[allow_redirects]",
+              "value": "never",
+              "type": "text",
+              "uuid": "6e0a621c-97a6-4b19-98c0-3b3072cd1135"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-12-R2 Confirm PaymentIntent",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);\r",
+              "\r",
+              "if (json.latest_charge) {\r",
+              "  const chargeId = (typeof json.latest_charge === \"string\")\r",
+              "    ? json.latest_charge\r",
+              "    : json.latest_charge.id;\r",
+              "  pm.environment.set(\"latest_charge_id\", chargeId);\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "payment_method",
+              "value": "{{pm_success}}",
+              "type": "text",
+              "uuid": "bce85de2-c2c7-4039-b79e-44beabca9dde"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents/{{pi_id}}/confirm",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents",
+            "{{pi_id}}",
+            "confirm"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-12-R3 Create Refund with amount=0 (should fail)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "\r",
+              "if (json.object === \"payment_intent\") {\r",
+              "  pm.environment.set(\"pi_id\", json.id);\r",
+              "}\r",
+              "\r",
+              "if (json.object === \"refund\") {\r",
+              "  pm.environment.set(\"refund_id\", json.id);\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "payment_intent",
+              "value": "{{pi_id}}",
+              "type": "text",
+              "uuid": "08a38dc2-3cf0-4896-8024-caffa33ce56b"
+            },
+            {
+              "key": "amount",
+              "value": "0",
+              "type": "text",
+              "uuid": "cc29202c-f33e-4cf4-a91f-14a995fdcb91"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/refunds",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "refunds"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-12-R4 Create Refund with amount=-50 (should fail)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "\r",
+              "if (json.object === \"payment_intent\") {\r",
+              "  pm.environment.set(\"pi_id\", json.id);\r",
+              "}\r",
+              "\r",
+              "if (json.object === \"refund\") {\r",
+              "  pm.environment.set(\"refund_id\", json.id);\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "payment_intent",
+              "value": "{{pi_id}}",
+              "type": "text",
+              "uuid": "08a38dc2-3cf0-4896-8024-caffa33ce56b"
+            },
+            {
+              "key": "amount",
+              "value": "-50",
+              "type": "text",
+              "uuid": "cc29202c-f33e-4cf4-a91f-14a995fdcb91"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/refunds",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "refunds"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-13-R1 Create PaymentIntent with Idempotency key",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "amount",
+              "value": "{{amount}}",
+              "type": "text",
+              "uuid": "22adac17-2a49-4070-9690-9abcd38291cf"
+            },
+            {
+              "key": "currency",
+              "value": "{{currency}}",
+              "type": "text",
+              "uuid": "4b798923-2d14-44b2-8ecc-f2dfe8b69396"
+            },
+            {
+              "key": "automatic_payment_methods[enabled]",
+              "value": "true",
+              "type": "text",
+              "uuid": "0cf379a7-3524-4955-8097-dd64b8b5db30"
+            },
+            {
+              "key": "automatic_payment_methods[allow_redirects]",
+              "value": "never",
+              "type": "text",
+              "uuid": "6e0a621c-97a6-4b19-98c0-3b3072cd1135"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-14-R1 Create PaymentIntent with Idempotency key",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Idempotency-Key",
+            "value": "idem_tc14_create_001",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "amount",
+              "value": "{{amount}}",
+              "type": "text",
+              "uuid": "22adac17-2a49-4070-9690-9abcd38291cf"
+            },
+            {
+              "key": "currency",
+              "value": "{{currency}}",
+              "type": "text",
+              "uuid": "4b798923-2d14-44b2-8ecc-f2dfe8b69396"
+            },
+            {
+              "key": "automatic_payment_methods[enabled]",
+              "value": "true",
+              "type": "text",
+              "uuid": "0cf379a7-3524-4955-8097-dd64b8b5db30"
+            },
+            {
+              "key": "automatic_payment_methods[allow_redirects]",
+              "value": "never",
+              "type": "text",
+              "uuid": "6e0a621c-97a6-4b19-98c0-3b3072cd1135"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "TC-14-R2 Create PaymentIntent with same Idempotency key but different amount",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();\r",
+              "pm.environment.set(\"pi_id\", json.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{secretKey}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Idempotency-Key",
+            "value": "idem_tc14_create_001",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "amount",
+              "value": "{{amount}}",
+              "type": "text",
+              "uuid": "22adac17-2a49-4070-9690-9abcd38291cf"
+            },
+            {
+              "key": "currency",
+              "value": "{{currency}}",
+              "type": "text",
+              "uuid": "4b798923-2d14-44b2-8ecc-f2dfe8b69396"
+            },
+            {
+              "key": "automatic_payment_methods[enabled]",
+              "value": "true",
+              "type": "text",
+              "uuid": "0cf379a7-3524-4955-8097-dd64b8b5db30"
+            },
+            {
+              "key": "automatic_payment_methods[allow_redirects]",
+              "value": "never",
+              "type": "text",
+              "uuid": "6e0a621c-97a6-4b19-98c0-3b3072cd1135"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/v1/payment_intents",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
