@@ -37,6 +37,3 @@ The template includes:
 ## Evidence + redaction
 See:
 - `docs/03-evidence-and-redaction.md`
-
-## License
-MIT (see `LICENSE`)
