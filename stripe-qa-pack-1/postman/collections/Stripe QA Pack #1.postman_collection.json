@@ -1981,8 +1981,17 @@
           "listen": "test",
           "script": {
             "exec": [
+              "// TC-13 helper: store the PI id, and assert on the 2nd run\r",
               "const json = pm.response.json();\r",
-              "pm.environment.set(\"pi_id\", json.id);"
+              "\r",
+              "const existing = pm.environment.get(\"tc13_pi_id\");\r",
+              "if (!existing) {\r",
+              "  pm.environment.set(\"tc13_pi_id\", json.id);  // first run\r",
+              "} else {\r",
+              "  pm.test(\"Idempotency returned the same PaymentIntent id\", function () {\r",
+              "    pm.expect(json.id).to.eql(existing);      // second run\r",
+              "  });\r",
+              "}"
             ],
             "type": "text/javascript",
             "packages": {},
@@ -2002,7 +2011,13 @@
           ]
         },
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "Idempotency-Key",
+            "value": "idem_tc13_create_001",
+            "type": "text"
+          }
+        ],
         "body": {
           "mode": "urlencoded",
           "urlencoded": [
@@ -2162,7 +2177,7 @@
           "urlencoded": [
             {
               "key": "amount",
-              "value": "{{amount}}",
+              "value": "2500",
               "type": "text",
               "uuid": "22adac17-2a49-4070-9690-9abcd38291cf"
             },
