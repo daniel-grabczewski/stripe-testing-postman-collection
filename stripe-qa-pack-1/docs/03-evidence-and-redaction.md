@@ -1,6 +1,6 @@
 # Evidence conventions + redaction
 
-## Evidence naming (recommended)
+## Evidence naming
 Request evidence:
 - `TC-XX-RY-auth.png` (Auth tab)
 - `TC-XX-RY-body.png` (Body tab)
