@@ -25,22 +25,18 @@ This repo is designed as a portfolio artifact: structured, documented, and runna
    - `secretKey` → your Stripe test secret key (`sk_test_...`)
 5. Select the environment in the top-right dropdown.
 6. Run the test cases in order:
-   - TC-00 → TC-14
+   - TC-00 → TC-14 (see screenshots in the evidence folder to help guide you with parameters and headers)
 
 ## Environment defaults
 The template includes:
 - `baseUrl = https://api.stripe.com`
 - `amount = 2000`
 - `currency = nzd`
-- Stripe test PaymentMethod tokens (e.g. `pm_card_visa`) :contentReference[oaicite:0]{index=0}
+- Stripe test PaymentMethod tokens (e.g. `pm_card_visa`)
 
 ## Evidence + redaction
 See:
 - `docs/03-evidence-and-redaction.md`
-
-## Known issues (and fixes)
-Before publishing or handing this repo to anyone, read:
-- `docs/05-known-issues-and-fixes.md`
 
 ## License
 MIT (see `LICENSE`)
